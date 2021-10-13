@@ -1,48 +1,44 @@
-import random
-import time
-from random import randint
-
-global n, representation
+n = 0
+representation = []
 
 
-def initialize(n):
-    return [[1 for i in range(n)], [1 for i in range(n)], 1]
+def initialize():
+    return [[1 for _ in range(n)], [1 for _ in range(n)], 1]
 
 
-def should_stop(representation):
+def should_stop():
     if sum(representation[0]) == 0 and sum(representation[1]) == 0 and representation[2] == 0:
         return True
     return False
 
 
-def validate(state, husband, wife, who_gets_back):
-    # who_gets_back == 0 -> husband gets back
-    if representation[0][husband] != representation[1][wife]:
-        return
+def validate(state: list, person_1: int, person_2: int) -> bool:
+    global n
+    # We have to move someone:
+    if person_1 < 0 and person_2 < 0:
+        return False
 
-    if who_gets_back == 1:
-        state[0][husband] ^= 1
-    else:
-        state[1][wife] ^= 1
+    # Check if those we want to move actually are on the side with the boat:
+    if person_1 >= 0 and state[person_1 // n][person_1 % n] != state[2] or \
+            person_2 >= 0 and state[person_2 // n][person_2 % n] != state[2]:
+        return False
 
-    if state[1][wife] != state[0][wife]:
-        for i in range(n):
-            if wife != i:
-                if state[1][wife] == state[0][i] and state[1][i] != state[0][i]:
-                    if who_gets_back == 1:
-                        state[0][husband] ^= 1
-                    else:
-                        state[1][wife] ^= 1
-                    return False
+    # Simulate transition and check if condition holds:
+    state[person_1 // n][person_1 % n] = not state[person_1 // n][person_1 % n]
+    state[person_2 // n][person_2 % n] = not state[person_2 // n][person_2 % n]
+    for i in range(n):
+        if state[0][i] != state[1][i] and state[1][i] in state[0]:
+            return False
+    return True
+
+
+def transition(state: list, person_1: int, person_2: int):
+    if validate(state, person_1, person_2):
+        state[person_1 // n][person_1 % n] = not state[person_1 // n][person_1 % n]
+        state[person_2 // n][person_2 % n] = not state[person_2 // n][person_2 % n]
+        state[2] = not state[2]
+
     return state
-
-
-def transition(state: list, husband, wife, who_gets_back):
-    global representation
-    result = validate(state, husband, wife, who_gets_back)
-    if result:
-        print(result)
-        representation = result
 
 
 def permute(size, lista):
@@ -61,16 +57,17 @@ def run():
     permutations = permute(2, list(map(str, range(n))))
     position = 0
 
-    while not should_stop(representation):
-        transition(representation, int(permutations[position][0]), int(permutations[position][1]), randint(0,1))
-        position = (position+1) % len(permutations)
+    while not should_stop():
+        transition(representation, int(permutations[position][0]), int(permutations[position][1]))
+        position = (position + 1) % len(permutations)
 
 
 def main():
     global n, representation
     n = int(input('Number of pairs:'))
-    representation = initialize(n)
-    run()
+    representation = initialize()
+    print(representation)
+    # run()
 
 
 if __name__ == '__main__':
