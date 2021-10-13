@@ -69,6 +69,7 @@ def permute(size, lista):
 
 
 def print_solution(stack: list):
+    global representation
     representation = initialize()
     print(representation)
     for person_1, person_2 in stack:
