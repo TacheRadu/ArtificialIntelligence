@@ -1,5 +1,7 @@
+from numpy.lib.function_base import copy
 from helper import *
 import numpy as np
+import copy
 
 n = 0
 representation = []
@@ -16,7 +18,7 @@ def heuristic(state):
 
 def generate_transition():
     person1 = np.random.randint(0, n*2)
-    person2 = np.random.randint(0, n*2)
+    person2 = np.random.randint(-1, n*2)
     return person1, person2
 
 
@@ -27,20 +29,19 @@ def hillclimber():
         if should_stop(representation):
             print(representation)
             return
+        print(representation)
+        old_representation = copy.deepcopy(representation)
         this_value = heuristic(representation)
-        new_representation = []
         while True:
             person1, person2 = generate_transition()
             if validate(representation, person1, person2, n):
+                transition(representation, person1, person2, n)
                 print("Swapping", person1, person2)
-                new_representation = transition(representation, person1, person2, n)
-                print(new_representation)
+                print(representation)
                 break
-        new_value = heuristic(new_representation)
-        print(new_value)
-        if(new_value < this_value):
-            representation = new_representation
-
+        print(heuristic(representation), this_value)
+        if(heuristic(representation) < this_value):
+            representation = old_representation
 
 
 def main():
@@ -48,7 +49,6 @@ def main():
     global representation
     n = int(input("Enter the number of pairs: "))
     representation = initialize(n)
-    print(representation)
     hillclimber()
     
 
