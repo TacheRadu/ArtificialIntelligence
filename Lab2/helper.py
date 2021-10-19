@@ -1,15 +1,3 @@
-def transition(state: list, person_1: int, person_2: int, n):
-    if validate(state, person_1, person_2, n):
-        if person_1 >= 0:
-            state[person_1 // n][person_1 % n] = not state[person_1 // n][person_1 % n]
-
-        if person_2 >= 0:
-            state[person_2 // n][person_2 % n] = not state[person_2 // n][person_2 % n]
-        state[2] = not state[2]
-
-    return state
-
-
 def initialize(n):
     return [[True for _ in range(n)], [True for _ in range(n)], True]
 
@@ -56,3 +44,23 @@ def validate(state: list, person_1: int, person_2: int, n) -> bool:
     state[2] = not state[2]
 
     return True
+
+
+def transition(state: list, person_1: int, person_2: int, n):
+    if validate(state, person_1, person_2, n):
+        if person_1 >= 0:
+            state[person_1 // n][person_1 % n] = not state[person_1 // n][person_1 % n]
+
+        if person_2 >= 0:
+            state[person_2 // n][person_2 % n] = not state[person_2 // n][person_2 % n]
+        state[2] = not state[2]
+
+    return state
+
+
+def print_solution(stack: list, n):
+    representation = initialize(n)
+    print(representation)
+    for person_1, person_2 in stack:
+        transition(representation, person_1, person_2, n)
+        print(representation)
