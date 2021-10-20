@@ -58,6 +58,15 @@ def transition(state: list, person_1: int, person_2: int, n):
     return state
 
 
+def heuristic(state):
+    sum = 0
+    for i in state[0]:
+        sum += not i
+    for i in state[1]:
+        sum += not i
+    return sum
+
+
 def print_solution(stack: list, n):
     representation = initialize(n)
     print(representation)

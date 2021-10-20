@@ -7,15 +7,6 @@ n = 0
 representation = []
 
 
-def heuristic(state):
-    sum = 0
-    for i in state[0]:
-        sum += not i
-    for i in state[1]:
-        sum += not i
-    return sum
-
-
 def generate_transition():
     person1 = np.random.randint(0, n*2)
     person2 = np.random.randint(-1, n*2)
@@ -40,7 +31,7 @@ def hillclimber():
                 print(representation)
                 break
         print(heuristic(representation), this_value)
-        if(heuristic(representation) < this_value):
+        if heuristic(representation) < this_value:
             representation = old_representation
 
 
