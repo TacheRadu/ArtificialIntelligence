@@ -16,19 +16,20 @@ def hillclimber(representation):
         if should_stop(representation):
             print(representation)
             return
-        print(representation)
         old_representation = copy.deepcopy(representation)
         this_value = heuristic(representation)
         while True:
             person1, person2 = generate_transition(n)
             if validate(representation, person1, person2, n):
                 transition(representation, person1, person2, n)
-                print("Swapping", person1, person2)
-                print(representation)
+                # print("Swapping", person1, person2)
+                # print(representation)
                 break
-        print(heuristic(representation), this_value)
         if heuristic(representation) < this_value:
             representation = old_representation
+        else:
+            print(representation)
+            print(heuristic(representation))
 
 
 def main():
