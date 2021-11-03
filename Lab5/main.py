@@ -56,7 +56,7 @@ def main():
         
     print(sequence)
         
-    for i in range(initial_state["k"] * 2):
+    for i in range(initial_state["n"] * 2):
         guess = list(map(int, input("Input your guess: ").split()))
         if len(guess) != initial_state["k"]:
             print("Wrong sequence length")
@@ -74,7 +74,7 @@ def main():
             
         correct_positions, correct_colors = check_sequence(sequence, guess)
         print("Correct positions: {}, correct colors: {}".format(correct_positions, correct_colors))
-        initial_state["corrects"] += correct_positions
+        initial_state["corrects"] = correct_positions
         initial_state["prev_states"].append({"corrects": initial_state["corrects"], "guess": guess})
         if correct_positions == initial_state["k"]:
             print("You won!")
