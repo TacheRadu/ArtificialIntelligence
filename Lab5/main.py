@@ -1,6 +1,4 @@
-import numpy as np
-import random
-
+from minimax import *
 
 def init():
     n = input("Input the number of colors: ")
@@ -8,25 +6,6 @@ def init():
     m = input("Input the maximum number of duplicates: ")
     initial_state = {"n": int(n), "k": int(k), "m": int(m), "colors": [-1] * int(k), "corrects": 0, "prev_states": []}
     return initial_state
-
-
-def generate_colors(n, k, m):
-    colors = [i for i in range(n) for j in range(m)]
-    random.shuffle(colors)
-    return colors[:k]
-
-
-def check_sequence(sequence, guess):
-    correct_positions = 0
-    for i in range(len(sequence)):
-        if sequence[i] == guess[i]:
-            correct_positions += 1
-    
-    correct_colors = 0
-    for i in guess:
-        if i in sequence:
-            correct_colors += 1
-    return correct_positions, correct_colors
 
 
 # guess = list(map(int, input("Input your guess: ").split()))
@@ -81,5 +60,6 @@ def main():
             return
             
 if __name__ == "__main__":
-    main()
-    
+    #main()
+    state = init()
+    minimax(state['n'], state['k'], state['m'])
