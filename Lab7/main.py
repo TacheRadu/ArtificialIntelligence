@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.core.fromnumeric import argmax
 
-EPOCS = int(input("How many epochs? "))
+EPOCHS = int(input("How many epochs? "))
 LR = float(input("Learning rate? "))
 HIDDEN_LAYER_SIZE = 69
 f = open("dataset_and.txt", "r")
@@ -10,7 +10,7 @@ labels = matrix[:, 2]
 matrix = matrix[:, :2]
 
 
-def sigmoid(x):
+def sigmoid(x) -> np.ndarray:
     return 1/(1+np.exp(-x))
 
 
@@ -26,17 +26,15 @@ def test(w_input, w_hidden, bias_input, bias_hidden):
     return count/4
 
 
-def train(matrix, epochs, learning_rate):
+def train(data, epochs, learning_rate):
     w_input = np.random.normal(0, 1/2 ** 0.5, (HIDDEN_LAYER_SIZE, 2))
-    #w_input = np.ones((HIDDEN_LAYER_SIZE, 2))
     bias_input = np.zeros(HIDDEN_LAYER_SIZE)
     w_hidden = np.random.normal(0, 1/HIDDEN_LAYER_SIZE ** 0.5, (2, HIDDEN_LAYER_SIZE))
-    #w_hidden = np.ones((2, HIDDEN_LAYER_SIZE))
     bias_hidden = np.zeros(2)
     best = 0
     for i in range(epochs):
         for j in range(4):
-            x = matrix[j]
+            x = data[j]
             z = sigmoid(np.dot(w_input, x) + bias_input)
             y = sigmoid(np.dot(w_hidden, z) + bias_hidden)
 
@@ -56,4 +54,4 @@ def train(matrix, epochs, learning_rate):
 
 
 if __name__ == '__main__':
-    train(matrix, EPOCS, LR)
+    train(matrix, EPOCHS, LR)
