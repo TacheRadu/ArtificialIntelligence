@@ -1,13 +1,30 @@
 import gym
+import numpy as np
+import pickle as pkl
 
-env = gym.make('FrozenLake-v1', is_slippery=False, map_name='4x4')
+# 1 - down
+# 2 - right
+# 3 - up
+# 4 - left
+
+env = gym.make('FrozenLake-v1', is_slippery=False)
+q = np.zeros((env.observation_space.n, env.action_space.n))
+eta = .628
+gma = .9
 
 observation = env.reset()
-for _ in range(10):
-    env.render()
+done = False
+for i in range(10000):
+    # env.render()
+    action = np.argmax(q[observation, :] + np.random.randn(1, env.action_space.n) * (1.0 / (i + 1)))
+    observation1, reward, done, info = env.step(action)
     
-    action = env.action_space.sample() # your agent here (this takes random actions)
-    observation, reward, done, info = env.step(action)
+    q[observation, action] = reward + gma * np.max(q[observation1, :])
+    observation = observation1
+    
     if done:
-        observation = env.reset()
+        env.reset()
+pkl.dump(q, open("q.pkl", "wb"))
+    
+    
 env.close()
